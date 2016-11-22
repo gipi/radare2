@@ -65,6 +65,8 @@ RUN curl -sL https://deb.nodesource.com/setup_7.x | bash - ; apt-get install -y 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # build and install r2
-RUN cd /opt/code; git clone https://github.com/radare/radare2.git; cd radare2; ./sys/install.sh ; make symstall
+#RUN cd /opt/code; git clone https://github.com/radare/radare2.git;
+COPY . /opt/code/radare2
+RUN cd /opt/code/radare2; ./sys/install.sh ; make symstall
 
 RUN r2 -V
