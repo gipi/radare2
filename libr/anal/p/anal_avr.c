@@ -189,23 +189,20 @@ static void __generic_ld_st(RAnalOp *op, char *mem, char ireg, int use_ramp, int
 	}
 }
 
+/* from the documentation: The Stack Pointer is pre-incremented by 1 before the POP.*/
 static void __generic_pop(RAnalOp *op, int sz) {
 	if (sz > 1) {
-		ESIL_A ("1,sp,+,_ram,+,");	// calc SRAM(sp+1)
-		ESIL_A ("[%d],", sz);		// read value
 		ESIL_A ("%d,sp,+=,", sz);	// sp += item_size
+		ESIL_A ("sp,_ram,+,[1],");	// calc SRAM(sp+1)
 	} else {
 		ESIL_A ("1,sp,+=,"		// increment stack pointer
-			"sp,_ram,+,[1],");	// load SRAM[sp]
+			"sp,_ram,+,[],");	// load SRAM[sp]
 	}
 }
-
+/* The Stack Pointer is post-decremented by 1 after the PUSH*/
 static void __generic_push(RAnalOp *op, int sz) {
 	ESIL_A ("sp,_ram,+,");			// calc pointer SRAM(sp)
-	if (sz > 1) {
-		ESIL_A ("-%d,+,", sz - 1);	// dec SP by 'sz'
-	}
-	ESIL_A ("=[%d],", sz);			// store value in stack
+	ESIL_A ("=[1],");			// store value in stack
 	ESIL_A ("-%d,sp,+=,", sz);		// decrement stack pointer
 }
 
