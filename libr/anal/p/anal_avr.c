@@ -1096,7 +1096,7 @@ INST_HANDLER (sbci) {	// SBCI Rd, k
 INST_HANDLER (subi) {	// SUBI Rd, k
 	int d = ((buf[0] >> 4) & 0xf) + 16;
 	int k = ((buf[1] & 0xf) << 4) | (buf[0] & 0xf);
-	ESIL_A ("cf,%d,-,r%d,-,", k, d);			// 0: (Rd-k-C)
+	ESIL_A ("%d,r%d,-,", k, d);			                // 0: (Rd-k)
 	ESIL_A ("r%d,0x08,&,!,"  "%d,0x08,&,!,!,"      "&,"	// H
 		"%d,0x08,&,!,!," "0,RPICK,0x08,&,!,!," "&,"
 		"%d,0x08,&,!,"   "0,RPICK,0x08,&,!,!," "&,"
@@ -1109,7 +1109,7 @@ INST_HANDLER (subi) {	// SUBI Rd, k
 		"|,vf,=,",
 		d, k, d, k);
 	ESIL_A ("0,RPICK,0x80,&,!,!,nf,=,");			// N
-	ESIL_A ("0,RPICK,!,zf,&,zf,=,");			// Z (C)
+	ESIL_A ("0,RPICK,!,zf,=,");			// Z
 	ESIL_A ("r%d,0x80,&,!,"  "%d,0x80,&,!,!,"      "&," 	// C
 		"%d,0x80,&,!,!," "0,RPICK,0x80,&,!,!," "&,"
 		"r%d,0x80,&,!,"  "0,RPICK,0x80,&,!,!," "&,"
